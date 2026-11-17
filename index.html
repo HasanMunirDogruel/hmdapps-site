@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HMD APPS — Restoran adisyon ve kasa programı</title>
+<meta name="description" content="HMD APPS Yazılım ve Bilişim Ltd. Şti. — Hatay merkezli yazılım şirketi. Restoranlar için adisyon ve kasa programı, mobil uygulama ve özel yazılım geliştirme.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone: #eceee9;      /* Antakya kireçtaşı */
+    --ink: #1d2721;        /* zeytin karası */
+    --olive: #55663a;
+    --kunefe: #df6f17;     /* künefe turuncusu */
+    --muted: #616b63;
+    --paper: #ffffff;
+    --rule: #cfd3cb;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--stone); color: var(--ink);
+    font: 17px/1.6 "Instrument Sans", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--kunefe); outline-offset: 3px; border-radius: 4px; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
+
+  /* üst */
+  header { padding: 22px 0; }
+  header .wrap { display: flex; align-items: center; gap: 28px; }
+  .logo { font: 800 22px/1 "Bricolage Grotesque", sans-serif; letter-spacing: -.02em; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+  .logo svg { flex: none; }
+  nav { margin-left: auto; display: flex; gap: 24px; font-weight: 500; }
+  nav a { text-decoration: none; color: var(--muted); }
+  nav a:hover { color: var(--ink); }
+
+  /* hero */
+  .hero { display: grid; grid-template-columns: 1.15fr .85fr; gap: 56px; align-items: center; padding-top: 56px; padding-bottom: 88px; }
+  h1 { font: 800 clamp(40px, 6vw, 72px)/1.02 "Bricolage Grotesque", sans-serif; letter-spacing: -.035em; margin: 0 0 24px; max-width: 13ch; }
+  .lead { font-size: 20px; color: var(--muted); max-width: 46ch; margin: 0 0 34px; }
+  .cta { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn { display: inline-block; padding: 15px 24px; border-radius: 10px; font-weight: 600; text-decoration: none; border: 2px solid var(--ink); }
+  .btn.primary { background: var(--ink); color: var(--stone); }
+  .btn.primary:hover { background: var(--olive); border-color: var(--olive); }
+  .btn.ghost:hover { background: var(--paper); }
+
+  /* fiş: sayfanın tek gösterişli öğesi */
+  .printer { position: relative; justify-self: center; width: 330px; }
+  .slot { height: 22px; background: var(--ink); border-radius: 12px 12px 4px 4px; position: relative; z-index: 2; }
+  .slot::after { content: ""; position: absolute; left: 22px; right: 22px; top: 10px; height: 4px; background: #000; border-radius: 2px; }
+  .receipt { margin: -6px 18px 0; background: var(--paper); padding: 26px 22px 30px;
+    font: 13px/1.55 "JetBrains Mono", monospace; color: #222; position: relative;
+    box-shadow: 0 18px 30px -18px rgba(29,39,33,.45);
+    clip-path: inset(0 0 0 0); transform-origin: top; }
+  .receipt::after { content: ""; position: absolute; left: 0; right: 0; bottom: -8px; height: 8px;
+    background: linear-gradient(-45deg, transparent 6px, var(--paper) 0) 0 0/12px 8px repeat-x,
+                linear-gradient(45deg, transparent 6px, var(--paper) 0) 0 0/12px 8px repeat-x; }
+  .receipt .c { text-align: center; }
+  .receipt .big { font-weight: 700; font-size: 17px; letter-spacing: .04em; }
+  .receipt .row { display: flex; justify-content: space-between; gap: 10px; }
+  .receipt hr { border: 0; border-top: 1px dashed #999; margin: 10px 0; }
+  .receipt .note { color: var(--kunefe); padding-left: 3ch; }
+  .receipt .tot { font-weight: 700; font-size: 16px; }
+  .receipt .ln { opacity: 1; }
+  @media (prefers-reduced-motion: no-preference) {
+    .receipt .ln { opacity: 0; animation: print .01s steps(1) forwards; animation-delay: calc(var(--i) * 140ms + 300ms); }
+    .receipt { animation: feed 2.6s steps(26) both .25s; }
+  }
+  @keyframes print { to { opacity: 1; } }
+  @keyframes feed { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
+
+  /* bölümler */
+  section { padding: 84px 0; border-top: 1px solid var(--rule); }
+  h2 { font: 800 clamp(30px, 4vw, 44px)/1.1 "Bricolage Grotesque", sans-serif; letter-spacing: -.025em; margin: 0 0 14px; max-width: 22ch; }
+  .intro { color: var(--muted); max-width: 58ch; margin: 0 0 44px; font-size: 18px; }
+
+  .services { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .services h3 { font: 600 22px/1.25 "Bricolage Grotesque", sans-serif; margin: 14px 0 8px; }
+  .services p { margin: 0; color: var(--muted); }
+  .services .mark { width: 44px; height: 44px; }
+
+  .product { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+  .features { list-style: none; margin: 0; padding: 0; }
+  .features li { padding: 16px 0; border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 26px 1fr; gap: 12px; }
+  .features li:first-child { border-top: 1px solid var(--rule); }
+  .features b { display: block; font-weight: 600; }
+  .features span { color: var(--muted); }
+  .tick { width: 20px; height: 20px; margin-top: 4px; }
+  .about { display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: start; }
+  .about p { margin: 0 0 18px; max-width: 60ch; }
+  .about p.first { font: 500 clamp(21px, 2.3vw, 26px)/1.45 "Bricolage Grotesque", sans-serif; letter-spacing: -.01em; }
+  .facts { border-top: 2px solid var(--ink); }
+  .facts div { padding: 16px 0; border-bottom: 1px solid var(--rule); }
+  .facts b { display: block; font: 600 18px/1.3 "Bricolage Grotesque", sans-serif; }
+  .facts span { color: var(--muted); font-size: 15px; }
+
+  .prod-list { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 64px; }
+  .prod { background: var(--paper); border-radius: 18px; padding: 30px; border: 1px solid var(--rule); }
+  .prod h3 { font: 700 24px/1.2 "Bricolage Grotesque", sans-serif; margin: 10px 0 10px; letter-spacing: -.015em; }
+  .prod p { margin: 0 0 14px; color: var(--muted); }
+  .prod ul { margin: 0; padding-left: 20px; }
+  .prod li { margin: 4px 0; }
+  .status { display: inline-block; font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 99px; }
+  .status.live { background: #e3ead6; color: var(--olive); }
+  .status.dev { background: #fbe6d4; color: #a2480b; }
+  .for { font-size: 14px; color: var(--muted); margin-top: 16px !important; }
+
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; counter-reset: s; }
+  .steps li { counter-increment: s; }
+  .steps li::before { content: counter(s); display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%;
+    border: 2px solid var(--ink); font: 700 17px/1 "Bricolage Grotesque", sans-serif; margin-bottom: 14px; }
+  .steps b { display: block; font-size: 18px; margin-bottom: 4px; }
+  .steps span { color: var(--muted); }
+
+  .contact { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
+  .contact .big { font: 600 clamp(22px, 2.6vw, 30px)/1.3 "Bricolage Grotesque", sans-serif; }
+  .contact .big a { text-decoration-color: var(--kunefe); text-decoration-thickness: 3px; text-underline-offset: 6px; }
+  .contact p { margin: 0 0 18px; }
+  .company { font-size: 15px; color: var(--muted); }
+  .company div { padding: 8px 0; border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 140px 1fr; gap: 12px; }
+  .company div b { color: var(--ink); font-weight: 600; }
+
+  footer { padding: 36px 0 48px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--rule); }
+
+  @media (max-width: 880px) {
+    .hero, .product, .contact, .about, .prod-list { grid-template-columns: 1fr; }
+    .services, .steps { grid-template-columns: 1fr 1fr; }
+    nav { display: none; }
+    .printer { width: 300px; }
+  }
+  @media (max-width: 560px) {
+    .services, .steps { grid-template-columns: 1fr; }
+    .company div { grid-template-columns: 1fr; gap: 2px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="logo" href="#">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
+        <rect x="1" y="1" width="12" height="12" rx="3" fill="#1d2721"/><rect x="17" y="1" width="12" height="12" rx="3" fill="#55663a"/>
+        <rect x="1" y="17" width="12" height="12" rx="3" fill="#55663a"/><rect x="17" y="17" width="12" height="12" rx="6" fill="#df6f17"/>
+      </svg>
+      HMD APPS
+    </a>
+    <nav aria-label="Ana menü">
+      <a href="#hakkimizda">Hakkımızda</a>
+      <a href="#urunler">Ürünler</a>
+      <a href="#hizmetler">Hizmetler</a>
+      <a href="#iletisim">İletişim</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <div>
+      <h1>Kasa, mutfak ve garsonlar aynı sistemde.</h1>
+      <p class="lead">HMD APPS'in adisyon ve kasa programıyla sipariş masada alınır, mutfakta yazıcıdan çıkar, hesap kasada kapanır. Hatay'dan, işletmeler ve okullar için yazılım geliştiriyoruz.</p>
+      <div class="cta">
+        <a class="btn primary" href="#iletisim">Bize ulaşın</a>
+        <a class="btn ghost" href="#urunler">Ürünlerimizi inceleyin</a>
+      </div>
+    </div>
+
+    <div class="printer" aria-label="Örnek mutfak fişi">
+      <div class="slot"></div>
+      <div class="receipt">
+        <div class="ln c big" style="--i:0">MUTFAK</div>
+        <div class="ln c big" style="--i:1">MASA 4</div>
+        <div class="ln c" style="--i:2">18.11.2026 20:41</div>
+        <div class="ln" style="--i:3">Garson: Ayşe</div>
+        <hr class="ln" style="--i:4">
+        <div class="ln" style="--i:5"><b>2 x Hatay Kebabı</b></div>
+        <div class="ln note" style="--i:6">&gt;&gt; biri acısız</div>
+        <div class="ln" style="--i:7"><b>1 x Oruk</b></div>
+        <div class="ln" style="--i:8"><b>3 x Ayran</b></div>
+        <div class="ln" style="--i:9"><b>2 x Künefe</b></div>
+        <div class="ln note" style="--i:10">&gt;&gt; yemekten sonra</div>
+        <hr class="ln" style="--i:11">
+        <div class="ln c" style="--i:12">Adisyon #1042</div>
+      </div>
+    </div>
+  </div>
+
+  <section id="hakkimizda">
+    <div class="wrap about">
+      <div>
+        <h2>Hakkımızda</h2>
+        <p class="first">HMD APPS, 2026'da Hatay'da kurulmuş bir yazılım şirketi. İşletmelerin ve okulların her gün uğraştığı işleri kısaltan, kolay kullanılan yazılımlar geliştiriyoruz.</p>
+        <p>Şirketin kurucusu bilgisayar mühendisi Hasan Münir Doğruel. Python ve FastAPI ile sunucu yazılımları, Android ve iOS uygulamaları ve Unity ile oyunlar geliştiriyor.</p>
+        <p>Kurulumu ve desteği kendimiz veriyoruz: bize ulaştığınızda karşınıza yazılımı yazan kişi çıkar.</p>
+      </div>
+      <div class="facts" aria-label="Kısaca HMD APPS">
+        <div><b>Hatay merkezli</b><span>Harbiye, Defne. Hatay'daki işletmelere yerinde kurulum ve destek.</span></div>
+        <div><b>Kendi ürünlerimiz</b><span>Restoranlar, okullar ve mobil kullanıcılar için geliştirdiğimiz yazılımlar.</span></div>
+        <div><b>İşletmeye özel yazılım</b><span>İhtiyacınıza göre web, mobil ve masaüstü çözümler.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="urunler">
+    <div class="wrap">
+      <h2>Ürünlerimiz</h2>
+      <p class="intro">Her biri belirli bir işi kısaltmak için geliştirildi.</p>
+      <div class="product">
+        <div>
+          <span class="status live">Aralık 2026'da restoranlarda kullanımda</span>
+          <h3 style="font:800 clamp(26px,3vw,34px)/1.15 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em;margin:14px 0 12px">Adisyon ve kasa programı</h3>
+          <p class="intro" style="margin-bottom:24px">Restoran ve kafeler için. Yoğun bir akşamda bile hızlı kullanılsın diye tasarlandı. İnternet kesilse de çalışmaya devam eder, çünkü veriler restoranın kendi kasa bilgisayarında tutulur. Beko yazarkasa POS ile doğrudan entegrasyon üzerinde çalışıyoruz.</p>
+        </div>
+        <ul class="features">
+          <li><svg class="tick" viewBox="0 0 20 20" aria-hidden="true"><path d="m4 10 4 4 8-8" fill="none" stroke="#55663a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><b>Mutfağa ve bara otomatik fiş</b><span>Yalnızca yeni siparişler basılır, notlar fişte görünür, iptaller ayrı fişle bildirilir.</span></div></li>
+          <li><svg class="tick" viewBox="0 0 20 20" aria-hidden="true"><path d="m4 10 4 4 8-8" fill="none" stroke="#55663a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><b>Garson telefondan sipariş alır</b><span>Ayrı uygulama gerekmez; restoranın Wi-Fi'ında tarayıcıdan açılır. Herkes kendi PIN'iyle girer.</span></div></li>
+          <li><svg class="tick" viewBox="0 0 20 20" aria-hidden="true"><path d="m4 10 4 4 8-8" fill="none" stroke="#55663a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><b>Nakit, kart ve parçalı ödeme</b><span>Para üstü hesabı, indirim, masa taşıma ve birleştirme. Çift ekranlı kasada müşteri tutarı canlı görür.</span></div></li>
+          <li><svg class="tick" viewBox="0 0 20 20" aria-hidden="true"><path d="m4 10 4 4 8-8" fill="none" stroke="#55663a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><b>Satış raporları</b><span>Günlük ve aylık ciro, en çok ve en az satan ürünler, masa ve garson performansı, yoğun saatler. Excel'e aktarılır.</span></div></li>
+        </ul>
+      </div>
+
+      <div class="prod-list">
+        <div class="prod">
+          <span class="status dev">Geliştiriliyor</span>
+          <h3>Rehberlik programı</h3>
+          <p>Okullardaki rehberlik işini yarı yarıya azaltmak için. Rehber öğretmen web panelinden çalışır, öğrenciler Android ve iOS uygulamasından katılır.</p>
+          <ul>
+            <li>Rehber öğretmenler için web paneli</li>
+            <li>Öğrenciler için Android ve iOS uygulaması</li>
+            <li>Öğretmen üyeliğiyle kullanım</li>
+          </ul>
+          <p class="for">Kimler için: okullar ve rehber öğretmenler</p>
+        </div>
+        <div class="prod">
+          <span class="status dev">Geliştiriliyor</span>
+          <h3>Dosya dönüştürücü</h3>
+          <p>Telefonda PDF, Word ve Excel dosyalarını birbirine dönüştüren ücretsiz mobil uygulama. Bilgisayara gerek kalmadan, birkaç dokunuşla.</p>
+          <ul>
+            <li>PDF, Word, Excel ve SVG dönüşümleri</li>
+            <li>Ücretsiz kullanım</li>
+            <li>Yakında Google Play'de</li>
+          </ul>
+          <p class="for">Kimler için: öğrenciler, çalışanlar, herkes</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="hizmetler">
+    <div class="wrap">
+      <h2>Hizmetler</h2>
+      <p class="intro">Ürünlerimizin yanında işletmelere özel yazılım da geliştiriyoruz.</p>
+      <div class="services">
+        <div>
+          <svg class="mark" viewBox="0 0 44 44" aria-hidden="true"><path d="M15 12 5 22l10 10M29 12l10 10-10 10" fill="none" stroke="#1d2721" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M25 8 19 36" stroke="#df6f17" stroke-width="2.5" stroke-linecap="round"/></svg>
+          <h3>İşletmeye özel yazılım</h3>
+          <p>Web panelleri, raporlama araçları ve mevcut sistemlerinizle çalışan entegrasyonlar.</p>
+        </div>
+        <div>
+          <svg class="mark" viewBox="0 0 44 44" aria-hidden="true"><rect x="12" y="3" width="20" height="38" rx="4" fill="none" stroke="#1d2721" stroke-width="2.5"/><circle cx="22" cy="35" r="2" fill="#df6f17"/></svg>
+          <h3>Mobil uygulama geliştirme</h3>
+          <p>Android ve iOS için uygulamalar: fikirden mağazada yayına kadar.</p>
+        </div>
+        <div>
+          <svg class="mark" viewBox="0 0 44 44" aria-hidden="true"><rect x="9" y="4" width="26" height="36" rx="3" fill="none" stroke="#1d2721" stroke-width="2.5"/><path d="M15 13h14M15 20h14M15 27h8" stroke="#df6f17" stroke-width="2.5" stroke-linecap="round"/></svg>
+          <h3>Kurulum ve destek</h3>
+          <p>Yazılımı işletmenize kurar, personelinizi eğitir, sonrasında da destek veririz.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kurulum">
+    <div class="wrap">
+      <h2>Restoranınıza kurulum nasıl ilerler</h2>
+      <p class="intro">Adisyon programına geçiş, işletmenizin açılışını aksatmadan şu sırayla yapılır:</p>
+      <ol class="steps">
+        <li><b>Keşif</b><span>İşletmeyi yerinde görür, masa düzenini ve mevcut donanımı inceleriz.</span></li>
+        <li><b>Menü ve kurulum</b><span>Menünüzü, fiyatları ve masaları sisteme girer, yazıcıları bağlarız.</span></li>
+        <li><b>Personel eğitimi</b><span>Kasiyer ve garsonlarla birlikte deneme siparişleri alırız.</span></li>
+        <li><b>Destek</b><span>Açılıştan sonra da sorunlarda telefonla veya yerinde destek veririz.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="iletisim">
+    <div class="wrap contact">
+      <div>
+        <h2>İletişim</h2>
+        <p class="big"><a href="tel:+905372078841">0537 207 88 41</a></p>
+        <p class="big"><a href="mailto:hasandogruel1@gmail.com">hasandogruel1@gmail.com</a></p>
+        <p>Harbiye Mah. Atatürk Blv. No: 369 E<br>Defne / Hatay</p>
+      </div>
+      <div class="company" aria-label="Şirket bilgileri">
+        <div><b>Ticaret ünvanı</b><span>HMD APPS Yazılım ve Bilişim Limited Şirketi</span></div>
+        <div><b>Vergi dairesi</b><span>Şükrükanatlı Vergi Dairesi</span></div>
+        <div><b>Vergi no</b><span>4631580104</span></div>
+        <div><b>Faaliyet</b><span>621000 – Bilgisayar programlama faaliyetleri</span></div>
+        <div><b>Kuruluş</b><span>2026, Hatay</span></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">© 2026 HMD APPS Yazılım ve Bilişim Ltd. Şti., Defne / Hatay</div>
+</footer>
+</body>
+</html>
