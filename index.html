@@ -5,16 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>HMD APPS — Fikirden ürüne yazılım</title>
 <meta name="description" content="HMD APPS Yazılım ve Bilişim Ltd. Şti. — Hatay merkezli yazılım şirketi. Mobil uygulamalar, işletme yazılımları ve oyunlar geliştiriyoruz.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Crect x='1' y='1' width='12' height='12' rx='3' fill='%231d2721'/%3E%3Crect x='17' y='1' width='12' height='12' rx='3' fill='%2355663a'/%3E%3Crect x='1' y='17' width='12' height='12' rx='3' fill='%2355663a'/%3E%3Crect x='17' y='17' width='12' height='12' rx='6' fill='%23df6f17'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="64x64" href="icon-64.png">
+<link rel="apple-touch-icon" href="icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --stone: #eceee9;      /* Antakya kireçtaşı */
-    --ink: #1d2721;        /* zeytin karası */
+    --ink: #131415;        /* logo siyahı */
     --olive: #55663a;
-    --kunefe: #df6f17;     /* künefe turuncusu */
+    --kunefe: #ff5a1f;     /* logo turuncusu */
     --teal: #2f6f73;       /* Asi nehri */
     --clay: #8f3a2c;
     --sand: #c9a35c;
@@ -32,10 +33,10 @@
   h1, h2, h3 { font-family: "Bricolage Grotesque", sans-serif; }
 
   /* üst */
-  header { padding: 16px 0; position: sticky; top: 0; z-index: 10; background: rgba(236,238,233,.92); backdrop-filter: blur(8px); }
+  header { padding: 10px 0; position: sticky; top: 0; z-index: 10; background: rgba(236,238,233,.92); backdrop-filter: blur(8px); }
   header .wrap { display: flex; align-items: center; gap: 28px; }
   .logo { font: 800 22px/1 "Bricolage Grotesque", sans-serif; letter-spacing: -.02em; text-decoration: none; display: flex; align-items: center; gap: 10px; }
-  .logo img, .logo svg { flex: none; height: 32px; width: auto; }
+  .logo img { display: block; height: 68px; width: auto; }
   nav { margin-left: auto; display: flex; align-items: center; gap: 24px; font-weight: 500; }
   nav a { text-decoration: none; color: var(--muted); }
   nav a:hover { color: var(--ink); }
@@ -51,17 +52,17 @@
   .btn.primary:hover { background: var(--olive); border-color: var(--olive); }
   .btn.ghost:hover { background: var(--paper); }
 
-  .mosaic { display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 128px; gap: 10px; }
+  .mosaic { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: 128px; gap: 10px; }
   .tile { border-radius: 16px; padding: 16px; color: #fff; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; }
   .tile b { font: 700 19px/1.15 "Bricolage Grotesque", sans-serif; letter-spacing: -.01em; }
   .tile small { font-size: 13px; opacity: .88; }
   .tile svg { width: 30px; height: 30px; }
-  .t1 { background: var(--kunefe); grid-column: span 2; }
-  .t2 { background: var(--ink); }
-  .t3 { background: var(--teal); }
-  .t4 { background: var(--olive); grid-row: span 2; }
-  .t5 { background: var(--clay); }
-  .t6 { background: var(--sand); color: var(--ink); grid-column: span 2; }
+  .t1 { background: var(--kunefe); grid-column: 1 / 3; grid-row: 1; }
+  .t2 { background: var(--ink); grid-column: 3; grid-row: 1; }
+  .t3 { background: var(--teal); grid-column: 1; grid-row: 2; }
+  .t5 { background: var(--clay); grid-column: 2; grid-row: 2; }
+  .t4 { background: var(--olive); grid-column: 3; grid-row: 2 / 4; }
+  .t6 { background: var(--sand); color: var(--ink); grid-column: 1 / 3; grid-row: 3; }
   .tile:hover { filter: brightness(1.07); }
   @media (prefers-reduced-motion: no-preference) {
     .tile { animation: set .5s cubic-bezier(.2,.8,.2,1) both; }
@@ -154,7 +155,10 @@
   }
   @media (max-width: 600px) {
     .grid, .values, .flow, .services, .numbers { grid-template-columns: 1fr; }
-    .mosaic { grid-auto-rows: 110px; }
+    .mosaic { grid-auto-rows: 104px; gap: 8px; }
+    .tile { padding: 12px; }
+    .tile b { font-size: 15px; }
+    .tile small { font-size: 12px; }
     .company div { grid-template-columns: 1fr; gap: 2px; }
   }
 </style>
@@ -163,12 +167,7 @@
 <header>
   <div class="wrap">
     <a class="logo" href="#" aria-label="HMD APPS ana sayfa">
-      <!-- LOGO: kendi logonuz gelince bu svg yerine <img src="logo.png" alt="HMD APPS"> -->
-      <svg viewBox="0 0 30 30" aria-hidden="true">
-        <rect x="1" y="1" width="12" height="12" rx="3" fill="#1d2721"/><rect x="17" y="1" width="12" height="12" rx="3" fill="#55663a"/>
-        <rect x="1" y="17" width="12" height="12" rx="3" fill="#55663a"/><rect x="17" y="17" width="12" height="12" rx="6" fill="#df6f17"/>
-      </svg>
-      HMD APPS
+      <img src="logo.png" alt="HMD APPS" width="107" height="68">
     </a>
     <nav aria-label="Ana menü">
       <a href="#biz-kimiz">Biz kimiz</a>
@@ -239,13 +238,13 @@
       <p class="intro">Farklı alanlarda, aynı özenle geliştirdiğimiz ürünler. Bazıları kullanımda, bazıları geliştirme aşamasında.</p>
       <div class="grid">
         <article class="card" style="--c:var(--kunefe)">
-          <div class="top"><span class="ico" style="background:#fde3cf"><svg viewBox="0 0 24 24" fill="none" stroke="#df6f17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg></span><span class="status s-soon">Yakında</span></div>
+          <div class="top"><span class="ico" style="background:#fde3cf"><svg viewBox="0 0 24 24" fill="none" stroke="#ff5a1f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg></span><span class="status s-soon">Yakında</span></div>
           <h3>Aleavo</h3>
           <p>HMD APPS'in yeni mobil uygulaması. Çok yakında yayında; ayrıntıları çıkışta paylaşacağız.</p>
           <ul><li>Mobil uygulama</li><li>Çıkış duyurusu bu sayfada</li></ul>
         </article>
         <article class="card" id="adisyon" style="--c:var(--ink)">
-          <div class="top"><span class="ico" style="background:#e6e9e4"><svg viewBox="0 0 24 24" fill="none" stroke="#1d2721" stroke-width="2" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 7h6M9 11h6M9 15h3"/></svg></span><span class="status s-live">Aralık 2026'da kullanımda</span></div>
+          <div class="top"><span class="ico" style="background:#e6e9e4"><svg viewBox="0 0 24 24" fill="none" stroke="#131415" stroke-width="2" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 7h6M9 11h6M9 15h3"/></svg></span><span class="status s-live">Aralık 2026'da kullanımda</span></div>
           <h3>Adisyon ve kasa programı</h3>
           <p>Restoran ve kafeler için. Sipariş masada alınır, mutfakta yazıcıdan çıkar, hesap kasada kapanır.</p>
           <ul><li>Mutfak ve bar yazıcısına otomatik fiş</li><li>Garson telefondan sipariş alır</li><li>Satış, masa ve garson raporları</li></ul>
@@ -296,12 +295,12 @@
       <h2>Sizin için ne yapabiliriz</h2>
       <p class="intro">Kendi ürünlerimizin yanında işletmelere ve girişimlere yazılım geliştiriyoruz.</p>
       <div class="services">
-        <div><svg viewBox="0 0 24 24" fill="none" stroke="#df6f17" stroke-width="2" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg><h3>Mobil uygulama</h3><p>Android ve iOS uygulamaları: fikirden mağazada yayına kadar.</p></div>
-        <div><svg viewBox="0 0 24 24" fill="none" stroke="#df6f17" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg><h3>Web ve panel</h3><p>Web siteleri, yönetim panelleri ve raporlama ekranları.</p></div>
-        <div><svg viewBox="0 0 24 24" fill="none" stroke="#df6f17" stroke-width="2" stroke-linecap="round"><path d="M4 6h16v12H4z"/><path d="M8 10h8M8 14h5"/></svg><h3>İşletme yazılımı</h3><p>Adisyon, stok, randevu gibi işletmeye özel masaüstü ve web çözümleri.</p></div>
-        <div><svg viewBox="0 0 24 24" fill="none" stroke="#df6f17" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 11v3M5.5 12.5h3"/></svg><h3>Oyun geliştirme</h3><p>Unity ile 2D ve 3D oyunlar, oyun içi arayüz ve araçlar.</p></div>
-        <div><svg viewBox="0 0 24 24" fill="none" stroke="#df6f17" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l3 3M16 16l3 3M19 5l-3 3M8 16l-3 3"/></svg><h3>Yapay zekâ</h3><p>Tahmin modelleri ve veriyle çalışan akıllı özellikler.</p></div>
-        <div><svg viewBox="0 0 24 24" fill="none" stroke="#df6f17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 7l3-3 3 3M17 4v9a4 4 0 01-4 4H4"/><path d="M7 14l-3 3 3 3"/></svg><h3>Entegrasyon ve destek</h3><p>Yazarkasa, yazıcı ve mevcut sistemlerle entegrasyon; kurulum ve eğitim.</p></div>
+        <div><svg viewBox="0 0 24 24" fill="none" stroke="#ff5a1f" stroke-width="2" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg><h3>Mobil uygulama</h3><p>Android ve iOS uygulamaları: fikirden mağazada yayına kadar.</p></div>
+        <div><svg viewBox="0 0 24 24" fill="none" stroke="#ff5a1f" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg><h3>Web ve panel</h3><p>Web siteleri, yönetim panelleri ve raporlama ekranları.</p></div>
+        <div><svg viewBox="0 0 24 24" fill="none" stroke="#ff5a1f" stroke-width="2" stroke-linecap="round"><path d="M4 6h16v12H4z"/><path d="M8 10h8M8 14h5"/></svg><h3>İşletme yazılımı</h3><p>Adisyon, stok, randevu gibi işletmeye özel masaüstü ve web çözümleri.</p></div>
+        <div><svg viewBox="0 0 24 24" fill="none" stroke="#ff5a1f" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 11v3M5.5 12.5h3"/></svg><h3>Oyun geliştirme</h3><p>Unity ile 2D ve 3D oyunlar, oyun içi arayüz ve araçlar.</p></div>
+        <div><svg viewBox="0 0 24 24" fill="none" stroke="#ff5a1f" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l3 3M16 16l3 3M19 5l-3 3M8 16l-3 3"/></svg><h3>Yapay zekâ</h3><p>Tahmin modelleri ve veriyle çalışan akıllı özellikler.</p></div>
+        <div><svg viewBox="0 0 24 24" fill="none" stroke="#ff5a1f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 7l3-3 3 3M17 4v9a4 4 0 01-4 4H4"/><path d="M7 14l-3 3 3 3"/></svg><h3>Entegrasyon ve destek</h3><p>Yazarkasa, yazıcı ve mevcut sistemlerle entegrasyon; kurulum ve eğitim.</p></div>
       </div>
       <div class="stack" aria-label="Kullandığımız teknolojiler">
         <span>Python</span><span>FastAPI</span><span>Flutter</span><span>Android</span><span>iOS / Swift</span><span>Node.js</span><span>PostgreSQL</span><span>Unity</span><span>C# / .NET</span>
